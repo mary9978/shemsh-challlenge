@@ -1,0 +1,14 @@
+@font-face {
+	font-family: YekanBakh;
+	font-style: normal;
+	font-weight: 400;
+	src: url('./YekanBakh-Regular.ttf') format('ttf'),   
+	url('./YekanBakh-Regular.ttf') format('ttf');	 
+}
+@font-face {
+	font-family: YekanBakh;
+	font-style: normal;
+	font-weight: 700;
+	src: url('./YekanBakh-Bold.ttf') format('ttf'),   
+	url('./YekanBakh-Bold.ttf') format('ttf');	 
+}
