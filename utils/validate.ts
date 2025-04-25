@@ -1,4 +1,4 @@
-export function priceFormat(price:string|null){
+export function priceFormat(price:string){
      return Number(price).toLocaleString("en-US");
 }
 export function convertRialToToman(rial: string): string {
@@ -10,7 +10,7 @@ export function convertRialToToman(rial: string): string {
   if (remainder === 0 && thousand > 0) result += "تومن";
   if (remainder > 0 && remainder !== thousand) result += `${thousand > 0 ? " و " : ""}${remainder} تومن`;
 
-  return result || "۰ تومن";
+  return result || "";
 }
 export function convertSotToGram(sot: string): number {
   const grams = Number(sot) / 100;

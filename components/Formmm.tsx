@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { Controller, useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import RialIcon from "@/assets/images/Vector.png";
 import SotIcon from "@/assets/images/Gram.Sut.png";
 const SOT_PRICE = 63680;
@@ -40,7 +40,7 @@ function parseCleanNumber(value: string): number {
   return isNaN(num) ? 0 : num;
 }
 
-export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
+export default function Formmm() {
   const {
     control,
     watch,
@@ -58,7 +58,7 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
 
   // Convert price to sot
   useEffect(() => {
-    if (!price) return;
+    if (!price) return; 
 
     const priceNum = parseCleanNumber(price);
     const newSot = Math.floor(priceNum / SOT_PRICE);
@@ -69,7 +69,7 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
 
   // Convert sot to price
   useEffect(() => {
-    if (!sot) return;
+    if (!sot) return; 
 
     const sotNum = parseInt(toEnglishDigits(sot));
     if (!isNaN(sotNum)) {
