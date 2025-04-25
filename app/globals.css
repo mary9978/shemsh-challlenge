@@ -1,4 +1,5 @@
 @import "../assets/fonts/fontyekan.css";
+@import url("https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,7 +16,20 @@ body {
   background: var(--background);
   font-family: "YekanBakh",Arial, Helvetica, sans-serif;
 }
-
+@layer components {
+  .tab--style{
+    @apply px-4 py-2 w-1/2 rounded-[4px] text-xs font-yekanBakh font-medium;
+  }
+  .active--tab{
+    @apply rounded-md  bg-accent text-white shadow;
+  }
+  .inactive--tab{
+    @apply text-primary;
+  }
+  .input--label{
+    @apply block text-primary font-yekanBakh text-sm  font-medium;
+  }
+}
 @layer utilities {
   .text-balance {
     text-wrap: balance;
