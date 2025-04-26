@@ -27,11 +27,12 @@ body {
   .tab--style {
     @apply px-4 py-2 w-1/2 rounded-[4px] text-xs font-IRANSansX font-medium;
   }
-  .active--tab , .button--style {
-    @apply rounded-md  bg-accent text-white shadow;
+  .active--tab,
+  .button--style {
+    @apply rounded-md text-xs  bg-accent text-white shadow;
   }
-  .disabled{
-    @apply 
+  .button--style.disabled {
+    @apply bg-light;
   }
   .inactive--tab {
     @apply text-primary;
@@ -39,7 +40,7 @@ body {
   .input--label {
     @apply block text-primary font-IRANSansX text-xs  font-normal;
   }
-  .input--error{
+  .input--error {
     @apply text-red-500 text-xs font-IRANSansX font-medium mt-1;
   }
 }

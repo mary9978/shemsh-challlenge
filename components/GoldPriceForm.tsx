@@ -5,9 +5,12 @@ import { useEffect } from "react";
 import RialIcon from "@/assets/images/Vector.png";
 import SotIcon from "@/assets/images/Gram.Sut.png";
 import { calculateGoldFee, convertSotToGram, formatWithCommas, parseCleanNumber, priceToTomanText, toEnglishDigits } from "@/utils/validate";
+import { PriceFormType } from "@/types/price.interface";
 const DEBOUNCE_DELAY = 1100;
-
-export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
+function toPersianDigits(str: string | number): string {
+  return str.toString().replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[parseInt(d)]);
+}
+export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormType) {
   const SOT_PRICE = Number(priceprop);
   const {
     control,
@@ -17,6 +20,8 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
+      // price: toPersianDigits("0"),
+      // sot: toPersianDigits("0"),
       price: "",
       sot: "",
     },
@@ -27,6 +32,7 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
   // Convert price to sot
 
   useEffect(() => {
+    disabledBtnFn(price,sot);
     if (!price) return;
 
     const handler = setTimeout(() => {
@@ -37,23 +43,24 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
       }
     }, DEBOUNCE_DELAY);
 
-    return () => clearTimeout(handler); // Cleanup timeout on dependency change
+    return () => clearTimeout(handler); 
   }, [price]);
 
   // Convert sot to price
   useEffect(() => {
+    disabledBtnFn(price,sot);
     if (!sot) return;
 
     const handler = setTimeout(() => {
       const sotNum = parseInt(toEnglishDigits(sot));
-      if (!isNaN(sotNum)) {
+      if (!isNaN(sotNum) && sotNum !== 0) {
         const priceValue = sotNum * SOT_PRICE;
         const formatted = formatWithCommas(priceValue);
         setValue("price", formatted, { shouldValidate: true });
       }
     }, DEBOUNCE_DELAY);
 
-    return () => clearTimeout(handler); 
+    return () => clearTimeout(handler);
   }, [sot]);
 
   return (
@@ -136,8 +143,8 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
       <div className="flex justify-between items-center">
         <p className="text-xs text-grayDark font-IRANSansX font-medium"> کارمز خرید :</p>
         <p className="text-xs text-grayMed font-IRANSansX font-medium">
-          {sot && !errors.sot ? <span className="mx-1 text-grayDark">{calculateGoldFee(sot)}</span>: 0 }
-          ریال 
+          {sot && !errors.sot ? <span className="mx-1 text-grayDark">{calculateGoldFee(sot)}</span> : 0}
+          ریال
         </p>
       </div>
     </div>
