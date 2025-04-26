@@ -1,11 +1,10 @@
 "use client";
-interface TabSwitcherProps {
-  activeTab: number;
-  toggleTab: (tabIndex: 1|2) => void;
-}
+
+import { TabSwitcherProps } from "@/types/price.interface";
+
 function GoldTabSwitcher({ activeTab, toggleTab }:TabSwitcherProps) {
   return (
-    <div className="flex gap-2 mt-8 mb-2 w-[320px] mx-auto lg:w-[550px]">
+    <div className="flex gap-2 mt-8 mb-2 w-[320px] bg-bgLight rounded mx-auto lg:w-[550px]">
       <button onClick={() => toggleTab(1)} className={`tab--style ${activeTab === 1 ? "active--tab" : "inactive--tab"}`}>
         خرید طلا
       </button>
