@@ -4,43 +4,11 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import RialIcon from "@/assets/images/Vector.png";
 import SotIcon from "@/assets/images/Gram.Sut.png";
-const SOT_PRICE = 63680;
-
-// Format number with commas
-function formatWithCommas(num: string | number): string {
-  return Number(num)
-    .toLocaleString("en-US")
-    .replace(/\d/g, (d) => String.fromCharCode(d.charCodeAt(0) + 1728));
-}
-function priceToTomanText(price: string): string {
-  const num = parseInt(toEnglishDigits(price).replace(/,/g, ""));
-  if (isNaN(num)) return "";
-
-  const toman = Math.floor(num / 10); // convert Rial to Toman
-  const million = Math.floor(toman / 1_000_000);
-  const thousand = Math.floor((toman % 1_000_000) / 1_000);
-
-  let result = "معادل ";
-  if (million > 0) result += `${formatWithCommas(million)} میلیون `;
-  if (thousand > 0) result += `${formatWithCommas(thousand)} هزار `;
-  result += "تومان";
-
-  return result.trim();
-}
-
-// Convert Persian numbers to English
-function toEnglishDigits(str: string): string {
-  return str.replace(/[\u06F0-\u06F9]/g, (d) => String.fromCharCode(d.charCodeAt(0) - 1728));
-}
-
-// Remove commas and convert to number safely
-function parseCleanNumber(value: string): number {
-  const raw = toEnglishDigits(value).replace(/,/g, "");
-  const num = parseInt(raw);
-  return isNaN(num) ? 0 : num;
-}
+import { convertSotToGram, formatWithCommas, parseCleanNumber, priceToTomanText, toEnglishDigits } from "@/utils/validate";
+const DEBOUNCE_DELAY = 1100;
 
 export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
+  const SOT_PRICE = Number(priceprop);
   const {
     control,
     watch,
@@ -57,26 +25,35 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
   const sot = watch("sot");
 
   // Convert price to sot
+
   useEffect(() => {
     if (!price) return;
 
-    const priceNum = parseCleanNumber(price);
-    const newSot = Math.floor(priceNum / SOT_PRICE);
-    if (!isNaN(newSot)) {
-      setValue("sot", newSot.toString(), { shouldValidate: true });
-    }
+    const handler = setTimeout(() => {
+      const priceNum = parseCleanNumber(price);
+      const newSot = Math.floor(priceNum / SOT_PRICE);
+      if (!isNaN(newSot)) {
+        setValue("sot", newSot.toString(), { shouldValidate: true });
+      }
+    }, DEBOUNCE_DELAY);
+
+    return () => clearTimeout(handler); // Cleanup timeout on dependency change
   }, [price]);
 
   // Convert sot to price
   useEffect(() => {
     if (!sot) return;
 
-    const sotNum = parseInt(toEnglishDigits(sot));
-    if (!isNaN(sotNum)) {
-      const priceValue = sotNum * SOT_PRICE;
-      const formatted = formatWithCommas(priceValue);
-      setValue("price", formatted, { shouldValidate: true });
-    }
+    const handler = setTimeout(() => {
+      const sotNum = parseInt(toEnglishDigits(sot));
+      if (!isNaN(sotNum)) {
+        const priceValue = sotNum * SOT_PRICE;
+        const formatted = formatWithCommas(priceValue);
+        setValue("price", formatted, { shouldValidate: true });
+      }
+    }, DEBOUNCE_DELAY);
+
+    return () => clearTimeout(handler); 
   }, [sot]);
 
   return (
@@ -89,20 +66,21 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
           rules={{
             validate: (val) => {
               const num = parseCleanNumber(val);
-              if (num < 63690) return "کمتر از حداقل مجاز است";
-              if (num > 2000000000) return "بیشتر از حداکثر مجاز است";
+              if (num < Number(priceprop)) return `حداقل مقدار طلا ${formatWithCommas(priceprop)} ریال می باشد`;
+              if (num > 2000000000) return "مبلغ پرداختی وارد شده بیشتر از سقف خرید روزانه است";
               return true;
             },
           }}
           render={({ field }) => (
             <div className="relative w-full mt-2">
               <input
-                className={`w-full px-4 py-2 border border-lightpurple font-yekanBakh rounded-lg focus:outline-none focus:ring-2 focus:ring-highlight ${
+                className={`w-full px-4 py-2 border border-lightpurple font-IRANSansX rounded-lg focus:outline-none focus:ring-2 focus:ring-highlight ${
                   errors.price ? "border-red-500" : "border-gray-300"
                 }`}
                 type="text"
                 inputMode="numeric"
                 value={field.value}
+                defaultValue={"0"}
                 onBlur={() => trigger("price")}
                 onChange={(e) => {
                   const raw = toEnglishDigits(e.target.value).replace(/,/g, "");
@@ -114,8 +92,8 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
             </div>
           )}
         />
-        {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price.message}</p>}
-        {price && !errors.price && <p className="text-xs mt-1 text-muted font-yekanBakh">{priceToTomanText(price)}</p>}
+        {errors.price && <p className="input--error">{errors.price.message}</p>}
+        {price && !errors.price && <p className="text-xs mt-1 text-muted font-IRANSansX">{priceToTomanText(price)}</p>}
       </div>
 
       {/* Sot Input */}
@@ -127,8 +105,8 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
           rules={{
             validate: (val) => {
               const num = parseInt(toEnglishDigits(val));
-              if (num < 1) return "حداقل مقدار ۱ است";
-              if (num > 60000) return "حداکثر مقدار ۹۹ است";
+              if (num < 1) return "حداقل مقدار 1 سوت است";
+              if (num > 60000) return "مبلغ پرداختی وارد شده بیشتر از سقف خرید روزانه است";
               return true;
             },
           }}
@@ -137,6 +115,7 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
               <input
                 type="number"
                 inputMode="numeric"
+                defaultValue={0}
                 className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:focus:ring-highlight ${
                   errors.price ? "border-red-500" : "border-gray-300"
                 }`}
@@ -151,7 +130,8 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
             </div>
           )}
         />
-        {errors.sot && <p className="text-red-500 text-sm mt-1">{errors.sot.message}</p>}
+        {errors.sot && <p className="input--error">{errors.sot.message}</p>}
+        {sot && !errors.sot && <p className="text-xs mt-1 text-muted font-IRANSansX">{convertSotToGram(sot)}</p>}
       </div>
     </div>
   );
