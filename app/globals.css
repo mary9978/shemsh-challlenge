@@ -1,33 +1,46 @@
 @import "../assets/fonts/fontyekan.css";
-@import url("https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.css");
+@import "../assets/fonts/fontiran.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
-
-
-
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: "YekanBakh",Arial, Helvetica, sans-serif;
+  font-family: IRANSansX, Arial, Helvetica, sans-serif;
 }
 @layer components {
-  .tab--style{
-    @apply px-4 py-2 w-1/2 rounded-[4px] text-xs font-yekanBakh font-medium;
+  .title {
+    @apply text-base text-primary w-1/2 font-IRANSansX font-medium text-end;
   }
-  .active--tab{
+  .icon--style {
+    @apply w-6 h-6 hover:cursor-pointer;
+  }
+
+  .card-container {
+    @apply flex bg-bgLight mt-4 w-[320px] lg:w-[550px] mx-auto items-center justify-between rounded-md bg-cardBackground p-4;
+  }
+
+  .tab--style {
+    @apply px-4 py-2 w-1/2 rounded-[4px] text-xs font-IRANSansX font-medium;
+  }
+  .active--tab , .button--style {
     @apply rounded-md  bg-accent text-white shadow;
   }
-  .inactive--tab{
+  .disabled{
+    @apply 
+  }
+  .inactive--tab {
     @apply text-primary;
   }
-  .input--label{
-    @apply block text-primary font-yekanBakh text-sm  font-medium;
+  .input--label {
+    @apply block text-primary font-IRANSansX text-xs  font-normal;
+  }
+  .input--error{
+    @apply text-red-500 text-xs font-IRANSansX font-medium mt-1;
   }
 }
 @layer utilities {
