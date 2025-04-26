@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import RialIcon from "@/assets/images/Vector.png";
 import SotIcon from "@/assets/images/Gram.Sut.png";
-import { convertSotToGram, formatWithCommas, parseCleanNumber, priceToTomanText, toEnglishDigits } from "@/utils/validate";
+import { calculateGoldFee, convertSotToGram, formatWithCommas, parseCleanNumber, priceToTomanText, toEnglishDigits } from "@/utils/validate";
 const DEBOUNCE_DELAY = 1100;
 
 export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
@@ -132,6 +132,13 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
         />
         {errors.sot && <p className="input--error">{errors.sot.message}</p>}
         {sot && !errors.sot && <p className="text-xs mt-1 text-muted font-IRANSansX">{convertSotToGram(sot)}</p>}
+      </div>
+      <div className="flex justify-between items-center">
+        <p className="text-xs text-grayDark font-IRANSansX font-medium"> کارمز خرید :</p>
+        <p className="text-xs text-grayMed font-IRANSansX font-medium">
+          {sot && !errors.sot ? <span className="mx-1 text-grayDark">{calculateGoldFee(sot)}</span>: 0 }
+          ریال 
+        </p>
       </div>
     </div>
   );

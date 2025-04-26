@@ -51,3 +51,9 @@ export function parseCleanNumber(value: string): number {
   const num = parseInt(raw);
   return isNaN(num) ? 0 : num;
 }
+export function calculateGoldFee(weightSoot:string) {
+  const feePerSoot = 335.05; 
+  const fee = Number(weightSoot) * feePerSoot;
+  const persianNumberFee = toEnglishDigits(Math.round(fee).toString()).replace(/,/g, "");
+  return formatWithCommas(persianNumberFee); 
+}
