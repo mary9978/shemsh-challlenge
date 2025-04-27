@@ -11,7 +11,6 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: IRANSansX, Arial, Helvetica, sans-serif;
-
 }
 @layer components {
   .title {
@@ -20,11 +19,12 @@ body {
   .icon--style {
     @apply w-6 h-6 hover:cursor-pointer;
   }
-
   .card-container {
     @apply flex bg-bgLight mt-4 w-[320px] md:w-[550px] mx-auto items-center justify-between rounded-md  p-4;
   }
-
+  .tab-container {
+    @apply flex gap-2 mt-8 mb-2 w-[320px] bg-bgLight rounded mx-auto md:w-[550px];
+  }
   .tab--style {
     @apply px-4 py-2 w-1/2 rounded-[4px] text-xs font-IRANSansX font-medium;
   }

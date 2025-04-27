@@ -27,6 +27,10 @@ const config: Config = {
       boxShadow: {
         "custom-card": "0px 0px 10px -4px #00000024, 0px 2px 12px -2px #0000001A",
       },
+      fontSize: {
+        "10px": "10px",  
+        "11px": "11px",
+      },
     },
   },
   plugins: [],

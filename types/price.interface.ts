@@ -5,7 +5,7 @@ interface GoldPriceType{
 }
 export interface TabSwitcherProps {
   activeTab: number;
-  toggleTab: (tabIndex: 1|2) => void;
+  toggleTab: (tabIndex: number) => void;
 }
 export interface PriceFormType {
   priceprop: string;
