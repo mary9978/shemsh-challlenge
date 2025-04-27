@@ -2,17 +2,25 @@
 
 import { TabSwitcherProps } from "@/types/price.interface";
 
-function GoldTabSwitcher({ activeTab, toggleTab }:TabSwitcherProps) {
+const GoldTabSwitcher: React.FC<TabSwitcherProps> = ({ activeTab, toggleTab }) => {
+  const tabs = [
+    { id: 1, label: "خرید طلا" },
+    { id: 2, label: "فروش طلا" },
+  ];
+
   return (
-    <div className="flex gap-2 mt-8 mb-2 w-[320px] bg-bgLight rounded mx-auto md:w-[550px]">
-      <button onClick={() => toggleTab(1)} className={`tab--style ${activeTab === 1 ? "active--tab" : "inactive--tab"}`}>
-        خرید طلا
-      </button>
-      <button onClick={() => toggleTab(2)} className={`tab--style ${activeTab === 2 ? "active--tab" : "inactive--tab"}`}>
-        فروش طلا
-      </button>
+    <div className="tab-container">
+      {tabs.map((tab) => (
+        <button
+          key={tab.id}
+          onClick={() => toggleTab(tab.id)}
+          className={`tab--style ${activeTab === tab.id ? "active--tab" : "inactive--tab"}`}
+        >
+          {tab.label}
+        </button>
+      ))}
     </div>
   );
-}
+};
 
 export default GoldTabSwitcher;
