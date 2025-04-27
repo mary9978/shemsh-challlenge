@@ -4,12 +4,9 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import RialIcon from "@/assets/images/Vector.png";
 import SotIcon from "@/assets/images/Gram.Sut.png";
-import { calculateGoldFee, convertSotToGram, formatWithCommas, parseCleanNumber, priceToTomanText, toEnglishDigits } from "@/utils/validate";
+import { calculateGoldFee, convertSotToGram, formatWithCommas, parseCleanNumber, priceToTomanText, toEnglishDigits, toPersianDigits } from "@/utils/validate";
 import { PriceFormType } from "@/types/price.interface";
 const DEBOUNCE_DELAY = 1100;
-function toPersianDigits(str: string | number): string {
-  return str.toString().replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[parseInt(d)]);
-}
 export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormType) {
   const SOT_PRICE = Number(priceprop);
   const {
@@ -22,8 +19,8 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
     defaultValues: {
       // price: toPersianDigits("0"),
       // sot: toPersianDigits("0"),
-      price: "",
-      sot: "",
+      price: "0",
+      sot: "0",
     },
   });
   const price = watch("price");
@@ -87,7 +84,6 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
                 type="text"
                 inputMode="numeric"
                 value={field.value}
-                defaultValue={"0"}
                 onBlur={() => trigger("price")}
                 onChange={(e) => {
                   const raw = toEnglishDigits(e.target.value).replace(/,/g, "");
@@ -100,7 +96,7 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
           )}
         />
         {errors.price && <p className="input--error">{errors.price.message}</p>}
-        {price && !errors.price && <p className="text-xs mt-1 text-muted font-IRANSansX">{priceToTomanText(price)}</p>}
+        {Number(price) !== 0 && !errors.price && <p className="text-xs mt-1 text-muted font-IRANSansX">{priceToTomanText(price)}</p>}
       </div>
 
       {/* Sot Input */}
@@ -122,7 +118,6 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
               <input
                 type="number"
                 inputMode="numeric"
-                defaultValue={0}
                 className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:focus:ring-highlight ${
                   errors.price ? "border-red-500" : "border-gray-300"
                 }`}
@@ -138,7 +133,7 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
           )}
         />
         {errors.sot && <p className="input--error">{errors.sot.message}</p>}
-        {sot && !errors.sot && <p className="text-xs mt-1 text-muted font-IRANSansX">{convertSotToGram(sot)}</p>}
+        {Number(sot) !==0 && !errors.sot && <p className="text-xs mt-1 text-muted font-IRANSansX">{convertSotToGram(sot)}</p>}
       </div>
       <div className="flex justify-between items-center">
         <p className="text-xs text-grayDark font-IRANSansX font-medium"> کارمز خرید :</p>

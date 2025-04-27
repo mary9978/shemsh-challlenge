@@ -1,7 +1,7 @@
 export function priceFormat(price: string) {
   return Number(price).toLocaleString("fa-IR");
 }
-export function convertRialToToman(rial: string): string {
+export function convertRialToToman(rial: string) {
   const toman = Math.floor(Number(rial) / 10);
   const thousand = Math.floor(toman / 1000);
   const remainder = toman % 1000;
@@ -15,9 +15,8 @@ export function convertRialToToman(rial: string): string {
 export function convertSotToGram(sot: string): string {
   const grams = Number(sot) / 1000;
   const gramValue = Math.floor(grams * 1000) / 1000;
-  return `معادل ${gramValue} گرم`;
+  return `معادل ${toPersianDigits(gramValue)} گرم`;
 }
-
 // Format number with commas
 export function formatWithCommas(num: string | number): string {
   return Number(num)
@@ -39,12 +38,10 @@ export function priceToTomanText(price: string): string {
 
   return result.trim();
 }
-
 // Convert Persian numbers to English
 export function toEnglishDigits(str: string): string {
   return str.replace(/[\u06F0-\u06F9]/g, (d) => String.fromCharCode(d.charCodeAt(0) - 1728));
 }
-
 // Remove commas and convert to number safely
 export function parseCleanNumber(value: string): number {
   const raw = toEnglishDigits(value).replace(/,/g, "");
@@ -56,4 +53,7 @@ export function calculateGoldFee(weightSoot:string) {
   const fee = Number(weightSoot) * feePerSoot;
   const persianNumberFee = toEnglishDigits(Math.round(fee).toString()).replace(/,/g, "");
   return formatWithCommas(persianNumberFee); 
+}
+export function toPersianDigits(str: string | number): string {
+  return str.toString().replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[parseInt(d)]);
 }
