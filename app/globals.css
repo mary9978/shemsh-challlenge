@@ -11,6 +11,7 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: IRANSansX, Arial, Helvetica, sans-serif;
+
 }
 @layer components {
   .title {
@@ -21,7 +22,7 @@ body {
   }
 
   .card-container {
-    @apply flex bg-bgLight mt-4 w-[320px] lg:w-[550px] mx-auto items-center justify-between rounded-md bg-cardBackground p-4;
+    @apply flex bg-bgLight mt-4 w-[320px] md:w-[550px] mx-auto items-center justify-between rounded-md  p-4;
   }
 
   .tab--style {
