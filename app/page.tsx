@@ -35,7 +35,7 @@ export default function Home() {
   }, []);
   return (
     <div className="container-fluid flex justify-center h-screen">
-      <div className="flex flex-col w-[360px] lg:w-[600px] pt-6 border justify-between shadow-xl">
+      <div className="flex flex-col w-[360px] md:w-[600px] pt-6 border justify-between shadow-xl">
         <div>
           <HeaderTitle />
           <GoldInstantPriceCard price={price} />
