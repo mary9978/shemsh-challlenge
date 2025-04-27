@@ -4,10 +4,10 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import RialIcon from "@/assets/images/Vector.png";
 import SotIcon from "@/assets/images/Gram.Sut.png";
-import { convertSotToGram, formatWithCommas, parseCleanNumber, priceToTomanText, toEnglishDigits } from "@/utils/validate";
+import { calculateGoldFee, convertSotToGram, formatWithCommas, parseCleanNumber, priceToTomanText, toEnglishDigits, toPersianDigits } from "@/utils/validate";
+import { PriceFormType } from "@/types/price.interface";
 const DEBOUNCE_DELAY = 1100;
-
-export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
+export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormType) {
   const SOT_PRICE = Number(priceprop);
   const {
     control,
@@ -17,8 +17,10 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      price: "",
-      sot: "",
+      // price: toPersianDigits("0"),
+      // sot: toPersianDigits("0"),
+      price: "0",
+      sot: "0",
     },
   });
   const price = watch("price");
@@ -27,6 +29,7 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
   // Convert price to sot
 
   useEffect(() => {
+    disabledBtnFn(price,sot);
     if (!price) return;
 
     const handler = setTimeout(() => {
@@ -37,23 +40,24 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
       }
     }, DEBOUNCE_DELAY);
 
-    return () => clearTimeout(handler); // Cleanup timeout on dependency change
+    return () => clearTimeout(handler); 
   }, [price]);
 
   // Convert sot to price
   useEffect(() => {
+    disabledBtnFn(price,sot);
     if (!sot) return;
 
     const handler = setTimeout(() => {
       const sotNum = parseInt(toEnglishDigits(sot));
-      if (!isNaN(sotNum)) {
+      if (!isNaN(sotNum) && sotNum !== 0) {
         const priceValue = sotNum * SOT_PRICE;
         const formatted = formatWithCommas(priceValue);
         setValue("price", formatted, { shouldValidate: true });
       }
     }, DEBOUNCE_DELAY);
 
-    return () => clearTimeout(handler); 
+    return () => clearTimeout(handler);
   }, [sot]);
 
   return (
@@ -80,7 +84,6 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
                 type="text"
                 inputMode="numeric"
                 value={field.value}
-                defaultValue={"0"}
                 onBlur={() => trigger("price")}
                 onChange={(e) => {
                   const raw = toEnglishDigits(e.target.value).replace(/,/g, "");
@@ -93,7 +96,7 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
           )}
         />
         {errors.price && <p className="input--error">{errors.price.message}</p>}
-        {price && !errors.price && <p className="text-xs mt-1 text-muted font-IRANSansX">{priceToTomanText(price)}</p>}
+        {Number(price) !== 0 && !errors.price && <p className="text-xs mt-1 text-muted font-IRANSansX">{priceToTomanText(price)}</p>}
       </div>
 
       {/* Sot Input */}
@@ -115,7 +118,6 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
               <input
                 type="number"
                 inputMode="numeric"
-                defaultValue={0}
                 className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:focus:ring-highlight ${
                   errors.price ? "border-red-500" : "border-gray-300"
                 }`}
@@ -131,7 +133,14 @@ export default function GoldPriceForm({ priceprop }: { priceprop: string }) {
           )}
         />
         {errors.sot && <p className="input--error">{errors.sot.message}</p>}
-        {sot && !errors.sot && <p className="text-xs mt-1 text-muted font-IRANSansX">{convertSotToGram(sot)}</p>}
+        {Number(sot) !==0 && !errors.sot && <p className="text-xs mt-1 text-muted font-IRANSansX">{convertSotToGram(sot)}</p>}
+      </div>
+      <div className="flex justify-between items-center">
+        <p className="text-xs text-grayDark font-IRANSansX font-medium"> کارمز خرید :</p>
+        <p className="text-xs text-grayMed font-IRANSansX font-medium">
+          {sot && !errors.sot ? <span className="mx-1 text-grayDark">{calculateGoldFee(sot)}</span> : 0}
+          ریال
+        </p>
       </div>
     </div>
   );

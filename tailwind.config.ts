@@ -10,6 +10,8 @@ const config: Config = {
         primary: "#212121",
         secondary: "#7D7E7F",
         cardBackground: "#FFFCF4",
+        grayDark: "#333333",
+        grayMed: "#666666",
         bgLight: "#FFF9F1",
         accent: "#C99E38",
         light: "#D7DEE0",

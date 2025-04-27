@@ -7,3 +7,7 @@ export interface TabSwitcherProps {
   activeTab: number;
   toggleTab: (tabIndex: 1|2) => void;
 }
+export interface PriceFormType {
+  priceprop: string;
+  disabledBtnFn: (priceprop: any, sot: any) => void;
+}
