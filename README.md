@@ -31,7 +31,7 @@ This is a front-end coding challenge for a gold-selling company. The goal is to 
 
 ## 📸 Preview
 
-Coming soon...
+![Project Preview](./assets/review.png)
 
 ---
 
