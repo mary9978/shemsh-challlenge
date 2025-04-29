@@ -11,3 +11,7 @@ export interface PriceFormType {
   priceprop: string;
   disabledBtnFn: (priceprop: any, sot: any) => void;
 }
+export interface DisplayProps {
+  sot: string;
+  errors: any;
+}

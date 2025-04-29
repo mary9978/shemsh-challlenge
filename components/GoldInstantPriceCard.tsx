@@ -9,7 +9,7 @@ interface GoldInstantPriceCardProps {
 }
 const GoldInstantPriceCard: React.FC<GoldInstantPriceCardProps> = ({ price }) => {
   return (
-    <div className="card-container custom-card">
+    <div className="card-container custom-card shadow-xl">
       <div className="flex gap-2">
         <Image width={32} height={32} src={GoldIcon} alt="shemsh gold" />
         <div className="flex flex-col">
