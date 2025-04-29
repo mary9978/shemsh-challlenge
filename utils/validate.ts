@@ -25,7 +25,7 @@ export function formatWithCommas(num: string | number): string {
 }
 export function priceToTomanText(price: string): string {
   const num = parseInt(toEnglishDigits(price).replace(/,/g, ""));
-  if (isNaN(num)) return "";
+  if (isNaN(num) || num === 0) return "";
   const toman = Math.floor(num / 10); // convert Rial to Toman
   const million = Math.floor(toman / 1_000_000);
   const thousand = Math.floor((toman % 1_000_000) / 1_000);

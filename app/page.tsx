@@ -37,14 +37,18 @@ export default function Home() {
   }, [price]);
   return (
     <div className="container-fluid flex justify-center h-screen">
-      <div className="flex flex-col w-[360px] md:w-[600px] pt-6 border justify-between shadow-xl">   
+      <div className="flex flex-col w-[360px] md:w-[600px] pt-6 border justify-between shadow-xl">
         <div>
           <HeaderTitle />
           <GoldInstantPriceCard price={price} />
           <GoldTabSwitcher activeTab={activeTab} toggleTab={toggleTab} />
           {activeTab === 1 && <GoldPriceForm priceprop={price} disabledBtnFn={handleDisableBtn} />}
         </div>
-        <button className={`button--style fixed left-0 bottom-0 right-0 ${disabledBtn ? "disabled" : ""} mb-4 mx-2 py-2`}>
+        <button
+          className={`button--style ${
+            disabledBtn ? "disabled" : ""
+          }`}
+        >
           {activeTab === 1 ? "خرید طلا" : "فروش طلا"}
         </button>
       </div>

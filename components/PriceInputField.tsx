@@ -1,14 +1,15 @@
-"use client";
-import { Controller } from "react-hook-form";
-import { formatWithCommas, parseCleanNumber, priceToTomanText, toEnglishDigits, toPersianDigits } from "@/utils/validate";
+import React from "react";
+import { Controller, FieldValues, UseFormTrigger } from "react-hook-form";
+import { formatWithCommas, parseCleanNumber, priceToTomanText, toPersianDigits, toEnglishDigits } from "@/utils/validate";
+import { MAX_TOMAN } from "@/utils/constants";
+import PriceToTomanDisplay from "./PriceToTomanDisplay";
 
 interface PriceInputFieldProps {
   price: string;
   priceprop: string;
   control: any;
-  trigger: (name: string) => void;
+  trigger: UseFormTrigger<any>;
   errors: any;
-  setValue: (name: string, value: any, options?: any) => void;
 }
 
 const PriceInputField: React.FC<PriceInputFieldProps> = ({ price, priceprop, control, trigger, errors }) => {
@@ -22,7 +23,7 @@ const PriceInputField: React.FC<PriceInputFieldProps> = ({ price, priceprop, con
           validate: (val) => {
             const num = parseCleanNumber(val);
             if (num < Number(priceprop)) return `حداقل مقدار طلا ${formatWithCommas(priceprop)} ریال می باشد`;
-            if (num > 2000000000) return "مبلغ پرداختی وارد شده بیشتر از سقف خرید روزانه است";
+            if (num > MAX_TOMAN) return "مبلغ پرداختی وارد شده بیشتر از سقف خرید روزانه است";
             return true;
           },
         }}
@@ -47,7 +48,7 @@ const PriceInputField: React.FC<PriceInputFieldProps> = ({ price, priceprop, con
         )}
       />
       {errors.price && <p className="input--error">{errors.price.message}</p>}
-      {Number(price) !== 0 && !errors.price && <p className="text-xs mt-1 text-muted font-IRANSansX">{priceToTomanText(price)}</p>}
+      <PriceToTomanDisplay price={price} errors={errors} />
     </div>
   );
 };
