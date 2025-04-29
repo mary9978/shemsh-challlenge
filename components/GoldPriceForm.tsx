@@ -2,7 +2,6 @@
 import Image from "next/image";
 import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
-import RialIcon from "@/assets/images/Vector.png";
 import SotIcon from "@/assets/images/Gram.Sut.png";
 import {
   formatWithCommas,
@@ -36,7 +35,9 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
   useEffect(() => {
     disabledBtnFn(price, sot);
     if (!price) return;
-
+    if (!SOT_PRICE) {
+      setValue("sot", "0");
+    }
     const handler = setTimeout(() => {
       const priceNum = parseCleanNumber(price);
       const newSot = Math.floor(priceNum / SOT_PRICE);
@@ -51,7 +52,9 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
   useEffect(() => {
     disabledBtnFn(price, sot);
     if (!sot) return;
-
+    if (!SOT_PRICE) {
+       setValue("price", "0");
+    }
     const handler = setTimeout(() => {
       const sotNum = parseInt(toEnglishDigits(sot));
       if (!isNaN(sotNum) && sotNum !== 0) {
@@ -99,9 +102,8 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
           )}
         />
         {errors.price && <p className="input--error">{errors.price.message}</p>}
-        {Number(price) !== 0 && !errors.price && <p className="text-xs mt-1 text-muted font-IRANSansX">{priceToTomanText(price)}</p>}
+        {Number(price) !== 0 && !errors.price ? <p className="text-xs mt-1 text-muted font-IRANSansX">{priceToTomanText(price)}</p>:""}
       </div>
-
       {/* Sot Input */}
       <div>
         <label className="input--label">مقدار طلا</label>
