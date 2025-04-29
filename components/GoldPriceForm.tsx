@@ -13,6 +13,7 @@ import {
 import { PriceFormType } from "@/types/price.interface";
 import SotToGramDisplay from "./SotToGramDisplay";
 import FeeDisplay from "./FeeDisplay";
+import { MAX_SOT, MAX_TOMAN, MIN_SOT } from "@/utils/constants";
 const DEBOUNCE_DELAY = 1100;
 export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormType) {
   const SOT_PRICE = Number(priceprop);
@@ -77,7 +78,7 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
             validate: (val) => {
               const num = parseCleanNumber(val);
               if (num < Number(priceprop)) return `حداقل مقدار طلا ${formatWithCommas(priceprop)} ریال می باشد`;
-              if (num > 2000000000) return "مبلغ پرداختی وارد شده بیشتر از سقف خرید روزانه است";
+              if (num > MAX_TOMAN) return "مبلغ پرداختی وارد شده بیشتر از سقف خرید روزانه است";
               return true;
             },
           }}
@@ -113,8 +114,8 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
           rules={{
             validate: (val) => {
               const num = parseInt(toEnglishDigits(val));
-              if (num !== 0 && num < 1) return "حداقل مقدار 1 سوت است";
-              if (num > 60000) return "مبلغ پرداختی وارد شده بیشتر از سقف خرید روزانه است";
+              if (num !== 0 && num < MIN_SOT) return "حداقل مقدار 1 سوت است";
+              if (num > MAX_SOT) return "مبلغ پرداختی وارد شده بیشتر از سقف خرید روزانه است";
               return true;
             },
           }}
