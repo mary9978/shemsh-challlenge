@@ -31,7 +31,7 @@ This is a front-end coding challenge for a gold-selling company. The goal is to 
 
 ## 📸 Preview
 
-<img src="./assets/review.png" alt="Project Preview" width="400" height="300" />
+<img src="./assets/review.png" alt="Project Preview" width="400" height="500" />
 
 ---
 
