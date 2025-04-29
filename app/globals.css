@@ -31,9 +31,11 @@ body {
   .tab--style {
     @apply px-4 py-2 w-1/2 rounded-[4px] text-xs font-IRANSansX font-medium;
   }
-  .active--tab,
-  .button--style {
+  .active--tab {
     @apply rounded-md text-xs  bg-accent text-white shadow;
+  }
+  .button--style{
+    @apply mb-4 py-2 mx-auto w-[312px] md:w-[552px] fixed left-0 bottom-0 right-0 rounded-md text-xs  bg-accent text-white shadow;
   }
   .button--style.disabled {
     @apply bg-light;
