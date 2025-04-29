@@ -26,16 +26,13 @@ export function formatWithCommas(num: string | number): string {
 export function priceToTomanText(price: string): string {
   const num = parseInt(toEnglishDigits(price).replace(/,/g, ""));
   if (isNaN(num)) return "";
-
   const toman = Math.floor(num / 10); // convert Rial to Toman
   const million = Math.floor(toman / 1_000_000);
   const thousand = Math.floor((toman % 1_000_000) / 1_000);
-
   let result = "معادل ";
   if (million > 0) result += `${formatWithCommas(million)}  میلیون `;
   if (thousand > 0) result += `${formatWithCommas(thousand)} هزار `;
   result += "تومان";
-
   return result.trim();
 }
 // Convert Persian numbers to English

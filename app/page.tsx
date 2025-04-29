@@ -28,7 +28,7 @@ export default function Home() {
           setPrice(data?.price);
         }
       } catch (error) {
-        console.error("Error fetching price:", error);
+        setPrice("0");
       }
     };
     fetchPrice();
@@ -44,7 +44,7 @@ export default function Home() {
           <GoldTabSwitcher activeTab={activeTab} toggleTab={toggleTab} />
           {activeTab === 1 && <GoldPriceForm priceprop={price} disabledBtnFn={handleDisableBtn} />}
         </div>
-        <button className={`button--style ${disabledBtn ? "disabled" : ""} mb-4 mx-2 py-2`}>
+        <button className={`button--style fixed left-0 bottom-0 right-0 ${disabledBtn ? "disabled" : ""} mb-4 mx-2 py-2`}>
           {activeTab === 1 ? "خرید طلا" : "فروش طلا"}
         </button>
       </div>
