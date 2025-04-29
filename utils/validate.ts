@@ -15,7 +15,7 @@ export function convertRialToToman(rial: string) {
 export function convertSotToGram(sot: string): string {
   const grams = Number(sot) / 1000;
   const gramValue = Math.floor(grams * 1000) / 1000;
-  return `معادل ${toPersianDigits(gramValue)} گرم`;
+  return `معادل ${toPersianDigits(gramValue.toString())} گرم`;
 }
 // Format number with commas
 export function formatWithCommas(num: string | number): string {
@@ -54,6 +54,6 @@ export function calculateGoldFee(weightSoot:string) {
   const persianNumberFee = toEnglishDigits(Math.round(fee).toString()).replace(/,/g, "");
   return formatWithCommas(persianNumberFee); 
 }
-export function toPersianDigits(str: string | number): string {
-  return str.toString().replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[parseInt(d)]);
-}
+export const toPersianDigits = (str: string): string => {
+  return str.replace(/\d/g, (d: string) => "۰۱۲۳۴۵۶۷۸۹"[parseInt(d)]);
+};

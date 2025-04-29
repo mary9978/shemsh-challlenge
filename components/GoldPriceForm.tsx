@@ -4,8 +4,16 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import RialIcon from "@/assets/images/Vector.png";
 import SotIcon from "@/assets/images/Gram.Sut.png";
-import { calculateGoldFee, convertSotToGram, formatWithCommas, parseCleanNumber, priceToTomanText, toEnglishDigits, toPersianDigits } from "@/utils/validate";
+import {
+  formatWithCommas,
+  parseCleanNumber,
+  priceToTomanText,
+  toEnglishDigits,
+  toPersianDigits,
+} from "@/utils/validate";
 import { PriceFormType } from "@/types/price.interface";
+import SotToGramDisplay from "./SotToGramDisplay";
+import FeeDisplay from "./FeeDisplay";
 const DEBOUNCE_DELAY = 1100;
 export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormType) {
   const SOT_PRICE = Number(priceprop);
@@ -17,19 +25,16 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
     formState: { errors },
   } = useForm({
     defaultValues: {
-      // price: toPersianDigits("0"),
-      // sot: toPersianDigits("0"),
       price: "0",
       sot: "0",
     },
   });
+  // watch value
   const price = watch("price");
   const sot = watch("sot");
-
   // Convert price to sot
-
   useEffect(() => {
-    disabledBtnFn(price,sot);
+    disabledBtnFn(price, sot);
     if (!price) return;
 
     const handler = setTimeout(() => {
@@ -40,12 +45,11 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
       }
     }, DEBOUNCE_DELAY);
 
-    return () => clearTimeout(handler); 
+    return () => clearTimeout(handler);
   }, [price]);
-
   // Convert sot to price
   useEffect(() => {
-    disabledBtnFn(price,sot);
+    disabledBtnFn(price, sot);
     if (!sot) return;
 
     const handler = setTimeout(() => {
@@ -59,7 +63,6 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
 
     return () => clearTimeout(handler);
   }, [sot]);
-
   return (
     <div className="mx-auto p-6 space-y-4">
       <div>
@@ -83,7 +86,7 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
                 }`}
                 type="text"
                 inputMode="numeric"
-                value={field.value}
+                value={toPersianDigits(field.value)}
                 onBlur={() => trigger("price")}
                 onChange={(e) => {
                   const raw = toEnglishDigits(e.target.value).replace(/,/g, "");
@@ -91,7 +94,7 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
                   field.onChange(formatted);
                 }}
               />
-              <Image width={28} src={RialIcon} alt="Rial icon" className="absolute left-3 top-1/2 transform -translate-y-1/2" />
+              <span className="inout--icon text-xs text-grayMed font-bold">ریال</span>
             </div>
           )}
         />
@@ -108,7 +111,7 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
           rules={{
             validate: (val) => {
               const num = parseInt(toEnglishDigits(val));
-              if (num < 1) return "حداقل مقدار 1 سوت است";
+              if (num !== 0 && num < 1) return "حداقل مقدار 1 سوت است";
               if (num > 60000) return "مبلغ پرداختی وارد شده بیشتر از سقف خرید روزانه است";
               return true;
             },
@@ -116,32 +119,27 @@ export default function GoldPriceForm({ priceprop, disabledBtnFn }: PriceFormTyp
           render={({ field }) => (
             <div className="relative w-full mt-2">
               <input
-                type="number"
+                type="text"
                 inputMode="numeric"
                 className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:focus:ring-highlight ${
                   errors.price ? "border-red-500" : "border-gray-300"
                 }`}
-                value={field.value}
+                value={toPersianDigits(field.value)}
                 onBlur={() => trigger("sot")}
                 onChange={(e) => {
-                  const val = e.target.value.replace(/[^0-9۰-۹]/g, "");
-                  field.onChange(val);
+                  const englishValue = toEnglishDigits(e.target.value);
+                  field.onChange(englishValue);
                 }}
               />
-              <Image src={SotIcon} alt="Sot icon" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" />
+              <Image src={SotIcon} alt="Sot icon" className="inout--icon w-5 h-5" />
             </div>
           )}
         />
         {errors.sot && <p className="input--error">{errors.sot.message}</p>}
-        {Number(sot) !==0 && !errors.sot && <p className="text-xs mt-1 text-muted font-IRANSansX">{convertSotToGram(sot)}</p>}
+        <SotToGramDisplay sot={sot} errors={errors} />
       </div>
-      <div className="flex justify-between items-center">
-        <p className="text-xs text-grayDark font-IRANSansX font-medium"> کارمز خرید :</p>
-        <p className="text-xs text-grayMed font-IRANSansX font-medium">
-          {sot && !errors.sot ? <span className="mx-1 text-grayDark">{calculateGoldFee(sot)}</span> : 0}
-          ریال
-        </p>
-      </div>
+      {/* Fee Display */}
+      <FeeDisplay sot={sot} errors={errors} />
     </div>
   );
 }
