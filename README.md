@@ -3,6 +3,11 @@
 This is a front-end coding challenge for a gold-selling company. The goal is to build a responsive, pixel-perfect UI based on a Figma design, using **Next.js 14**, **Tailwind CSS v3**, and custom design assets like fonts and colors.
 
 ---
+## 🌐 Live Demo
+
+[View Project Live](https://shemsh-challlenge.vercel.app/)
+
+--- 
 
 ## 🚀 Tech Stack
 
